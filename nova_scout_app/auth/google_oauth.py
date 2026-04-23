@@ -6,13 +6,19 @@ from nova_scout_app.auth.config import AUTH_SCOPES, GOOGLE_OAUTH_CLIENT_CONFIG, 
 from nova_scout_app.auth.firebase_client import AuthError
 
 
+class PKCEInstalledAppFlow(InstalledAppFlow):
+    def fetch_token(self, **kwargs):
+        kwargs.setdefault("code_verifier", self.code_verifier)
+        return self.oauth2session.fetch_token(self.client_config["token_uri"], **kwargs)
+
+
 class GoogleOAuthService:
     def fetch_google_id_token(self) -> str:
         config_error = google_oauth_config_error()
         if config_error:
             raise AuthError(config_error)
         try:
-            flow = InstalledAppFlow.from_client_config(GOOGLE_OAUTH_CLIENT_CONFIG, AUTH_SCOPES)
+            flow = PKCEInstalledAppFlow.from_client_config(GOOGLE_OAUTH_CLIENT_CONFIG, AUTH_SCOPES)
             credentials = flow.run_local_server(
                 host="127.0.0.1",
                 port=0,

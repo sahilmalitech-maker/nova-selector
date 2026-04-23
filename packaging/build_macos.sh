@@ -43,6 +43,7 @@ mkdir -p "$GENERATED_DIR"
 mkdir -p "$ARTIFACTS_DIR"
 
 "$PYTHON_BIN" "$PROJECT_DIR/packaging/generate_icon.py"
+"$PYTHON_BIN" "$PROJECT_DIR/packaging/generate_auth_config_bundle.py"
 "$PYTHON_BIN" "$PROJECT_DIR/packaging/vendor_tesseract_runtime.py"
 "$PYTHON_BIN" -m PyInstaller --clean --noconfirm "$PROJECT_DIR/nova_image_scout.spec"
 

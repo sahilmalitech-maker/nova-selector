@@ -9,7 +9,6 @@
     "measurementId": "YOUR_MEASUREMENT_ID"
   },
   "google_oauth": {
-    "client_id": "YOUR_GOOGLE_CLIENT_ID",
-    "client_secret": "YOUR_GOOGLE_CLIENT_SECRET"
+    "client_id": "YOUR_GOOGLE_CLIENT_ID"
   }
 }
