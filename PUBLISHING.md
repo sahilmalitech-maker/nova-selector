@@ -1,24 +1,10 @@
-# Private GitHub Publishing Notes
+# GitHub Publishing Notes
 
 ## Recommended Setup
 
-Keep the GitHub repository private and push only the source code, packaging files, and documentation.
+Keep the GitHub repository public for source, documentation, and packaging files.
 
-Do not commit the built desktop artifacts directly into git. Publish the installers through releases or another download location instead.
-
-## Important GitHub Visibility Rule
-
-GitHub release assets inherit the visibility of the repository they belong to.
-
-That means:
-
-- private repo = private release downloads
-- public repo = public release downloads
-
-If you want private source code and public installers, use two separate locations:
-
-- private source repo: `nova-selector`
-- public downloads repo or public file host: installer `.exe` and macOS `.dmg`
+Do not commit the built desktop artifacts directly into git. Publish the installers through GitHub Releases instead.
 
 ## Release Assets To Upload
 
@@ -51,4 +37,4 @@ If the final Windows ZIP exceeds GitHub's release asset limits, the packaging sh
 
 ## Suggested Repository Description
 
-Private AI-powered desktop app for image retrieval, OCR-assisted search, visual similarity matching, and photographer-grade photo culling.
+Public AI-powered desktop app for image retrieval, OCR-assisted search, visual similarity matching, and photographer-grade photo culling.

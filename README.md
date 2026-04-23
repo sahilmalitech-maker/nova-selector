@@ -1,6 +1,6 @@
 # Nova Image Scout
 
-Nova Image Scout is a private AI-powered desktop application for photographers, editors, and creative teams who need to find the right image fast and reduce large shoots into final selects.
+Nova Image Scout is a public AI-powered desktop application for photographers, editors, and creative teams who need to find the right image fast and reduce large shoots into final selects.
 
 It combines image retrieval, OCR-assisted search, visual similarity matching, and photographer-style culling inside a polished PyQt desktop workflow for Windows and macOS.
 
@@ -62,9 +62,9 @@ Important release note for Windows:
 Important release note for GitHub:
 
 - Build artifacts are intentionally not committed to git in this repository.
-- The private GitHub repository should contain the source code and packaging scripts.
-- GitHub release assets follow repository visibility, so assets in a private repo are not public downloads.
-- To keep source code private while sharing installers publicly, use a second public downloads repo or another public file host for the `.exe` installer and `.dmg`.
+- Public downloads are published through GitHub Releases.
+- The recommended Windows asset is the installer `.exe`.
+- The recommended macOS asset is the `.dmg`.
 
 ## Current Packaging Notes
 
@@ -72,6 +72,7 @@ Important release note for GitHub:
 - `packaging/build_windows_installer.bat` builds an Inno Setup installer that installs into `Program Files` and can create a desktop shortcut.
 - `packaging/build_macos.sh` builds the macOS app bundle and DMG.
 - `README_MACOS_PACKAGING.md` includes the macOS signing and notarization notes.
+- If `nova_scout_app/auth/auth_config.local.json` exists on the build machine, it is bundled into the packaged desktop apps so Google Sign-In works in release builds without committing secrets to git.
 
 The current Windows bundle is very large because it packages OCR, TensorFlow, CLIP-related runtime dependencies, and other native libraries together. If GitHub release upload limits become a problem, the Windows package should be slimmed down before distribution.
 
@@ -106,4 +107,4 @@ python nova_image_scout.py
 
 ## Suggested GitHub Repo Description
 
-Private AI-powered desktop app for image retrieval, OCR-assisted search, visual similarity matching, and photographer-grade photo culling.
+Public AI-powered desktop app for image retrieval, OCR-assisted search, visual similarity matching, and photographer-grade photo culling.

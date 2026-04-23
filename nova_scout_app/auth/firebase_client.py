@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 
 import requests
 
-from nova_scout_app.auth.config import FIREBASE_WEB_CONFIG
+from nova_scout_app.auth.config import FIREBASE_WEB_CONFIG, firebase_config_error
 from nova_scout_app.auth.models import AuthSession, AuthUser
 
 
@@ -16,13 +16,19 @@ class AuthError(RuntimeError):
 
 class FirebaseAuthClient:
     def __init__(self) -> None:
+        self.config_error = firebase_config_error()
         self.api_key = FIREBASE_WEB_CONFIG["apiKey"]
         self.session = requests.Session()
         self.timeout = 20
         self.identity_base = "https://identitytoolkit.googleapis.com/v1"
         self.secure_token_base = "https://securetoken.googleapis.com/v1"
 
+    def _ensure_configured(self) -> None:
+        if self.config_error:
+            raise AuthError(self.config_error)
+
     def sign_in_with_google(self, google_id_token: str) -> AuthSession:
+        self._ensure_configured()
         post_body = urlencode({"id_token": google_id_token, "providerId": "google.com"})
         payload = {
             "postBody": post_body,
@@ -34,6 +40,7 @@ class FirebaseAuthClient:
         return self._session_from_auth_payload(data, provider="google.com")
 
     def refresh_session(self, refresh_token: str, cached_user: AuthUser | None = None) -> AuthSession:
+        self._ensure_configured()
         data = self._post_form(
             f"{self.secure_token_base}/token?key={self.api_key}",
             {
@@ -54,6 +61,7 @@ class FirebaseAuthClient:
         )
 
     def lookup_user(self, id_token: str) -> AuthUser | None:
+        self._ensure_configured()
         data = self._post_json(
             f"{self.identity_base}/accounts:lookup?key={self.api_key}",
             {"idToken": id_token},

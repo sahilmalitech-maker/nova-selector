@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -15,18 +16,53 @@ AUTH_SCOPES = [
 KEYRING_SERVICE_NAME = "NovaImageScoutAuth"
 
 _LOCAL_CONFIG_PATH = Path(__file__).with_name("auth_config.local.json")
+_FIREBASE_REQUIRED_KEYS = (
+    "apiKey",
+    "authDomain",
+    "projectId",
+    "appId",
+    "messagingSenderId",
+)
+_GOOGLE_REQUIRED_KEYS = ("client_id", "client_secret")
+
+
+def _candidate_config_paths() -> list[Path]:
+    candidates = [_LOCAL_CONFIG_PATH]
+
+    if getattr(sys, "frozen", False):
+        executable_dir = Path(sys.executable).resolve().parent
+        candidates.extend(
+            [
+                executable_dir / "nova_scout_app" / "auth" / "auth_config.local.json",
+                executable_dir / "_internal" / "nova_scout_app" / "auth" / "auth_config.local.json",
+            ]
+        )
+
+        meipass = getattr(sys, "_MEIPASS", None)
+        if meipass:
+            candidates.append(Path(meipass) / "nova_scout_app" / "auth" / "auth_config.local.json")
+
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        key = str(candidate)
+        if key not in seen:
+            seen.add(key)
+            unique.append(candidate)
+    return unique
 
 
 def _load_local_config() -> dict[str, Any]:
-    if not _LOCAL_CONFIG_PATH.exists():
-        return {}
-
-    try:
-        loaded = json.loads(_LOCAL_CONFIG_PATH.read_text(encoding="utf-8"))
-    except Exception:
-        return {}
-
-    return loaded if isinstance(loaded, dict) else {}
+    for path in _candidate_config_paths():
+        if not path.exists():
+            continue
+        try:
+            loaded = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if isinstance(loaded, dict):
+            return loaded
+    return {}
 
 
 def _local_mapping(key: str) -> dict[str, Any]:
@@ -66,3 +102,36 @@ GOOGLE_OAUTH_CLIENT_CONFIG = {
         "redirect_uris": ["http://localhost"],
     }
 }
+
+
+def missing_firebase_fields() -> list[str]:
+    return [key for key in _FIREBASE_REQUIRED_KEYS if not str(FIREBASE_WEB_CONFIG.get(key, "")).strip()]
+
+
+def missing_google_oauth_fields() -> list[str]:
+    installed = GOOGLE_OAUTH_CLIENT_CONFIG.get("installed", {})
+    return [key for key in _GOOGLE_REQUIRED_KEYS if not str(installed.get(key, "")).strip()]
+
+
+def firebase_config_error() -> str | None:
+    missing = missing_firebase_fields()
+    if not missing:
+        return None
+    return (
+        "Google sign-in is not configured in this build. "
+        "Missing Firebase settings: "
+        + ", ".join(missing)
+        + "."
+    )
+
+
+def google_oauth_config_error() -> str | None:
+    missing = missing_google_oauth_fields()
+    if not missing:
+        return None
+    return (
+        "Google sign-in is not configured in this build. "
+        "Missing Google OAuth settings: "
+        + ", ".join(missing)
+        + "."
+    )

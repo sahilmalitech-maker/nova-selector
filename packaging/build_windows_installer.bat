@@ -15,6 +15,7 @@ if not exist "%APP_DIR%\Nova Image Scout.exe" (
   exit /b 1
 )
 
+if exist "%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" set "ISCC_BIN=%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe"
 if exist "%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" set "ISCC_BIN=%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe"
 if not defined ISCC_BIN if exist "%ProgramFiles%\Inno Setup 6\ISCC.exe" set "ISCC_BIN=%ProgramFiles%\Inno Setup 6\ISCC.exe"
 if not defined ISCC_BIN for %%I in (ISCC.exe) do set "ISCC_BIN=%%~$PATH:I"

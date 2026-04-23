@@ -10,6 +10,7 @@ spec_dir = Path(globals().get("__file__", "nova_image_scout.windows.spec")).reso
 generated_dir = spec_dir / "packaging" / "generated"
 icon_path = generated_dir / "NovaImageScout.ico"
 windows_tesseract_runtime = generated_dir / "windows-tesseract-runtime"
+auth_config_path = spec_dir / "nova_scout_app" / "auth" / "auth_config.local.json"
 
 datas = []
 binaries = []
@@ -30,6 +31,9 @@ for distribution_name in ("tensorflow", "keras", "numpy", "pytesseract", "Pillow
 
 if windows_tesseract_runtime.exists():
     datas.append((str(windows_tesseract_runtime), "tesseract-runtime"))
+
+if auth_config_path.exists():
+    datas.append((str(auth_config_path), "nova_scout_app/auth"))
 
 
 a = Analysis(
