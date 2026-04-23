@@ -1,0 +1,15 @@
+{
+  "firebase": {
+    "apiKey": "YOUR_FIREBASE_API_KEY",
+    "authDomain": "your-project.firebaseapp.com",
+    "projectId": "your-project-id",
+    "storageBucket": "your-project.firebasestorage.app",
+    "messagingSenderId": "YOUR_MESSAGING_SENDER_ID",
+    "appId": "YOUR_APP_ID",
+    "measurementId": "YOUR_MEASUREMENT_ID"
+  },
+  "google_oauth": {
+    "client_id": "YOUR_GOOGLE_CLIENT_ID",
+    "client_secret": "YOUR_GOOGLE_CLIENT_SECRET"
+  }
+}

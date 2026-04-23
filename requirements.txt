@@ -1,0 +1,10 @@
+PyQt6
+numpy
+opencv-python
+Pillow
+pytesseract
+tensorflow
+requests
+keyring
+google-auth
+google-auth-oauthlib
