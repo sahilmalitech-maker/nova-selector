@@ -32,6 +32,7 @@ def main() -> None:
         },
         "google_oauth": {
             "client_id": google_oauth.get("client_id", ""),
+            "client_secret": google_oauth.get("client_secret", ""),
         },
     }
 

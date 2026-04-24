@@ -9,7 +9,11 @@ from nova_scout_app.auth.firebase_client import AuthError
 class PKCEInstalledAppFlow(InstalledAppFlow):
     def fetch_token(self, **kwargs):
         kwargs.setdefault("code_verifier", self.code_verifier)
-        kwargs.setdefault("include_client_id", True)
+        client_secret = str(self.client_config.get("client_secret", "")).strip()
+        if client_secret:
+            kwargs.setdefault("client_secret", client_secret)
+        else:
+            kwargs.setdefault("include_client_id", True)
         return self.oauth2session.fetch_token(self.client_config["token_uri"], **kwargs)
 
 
@@ -32,7 +36,8 @@ class GoogleOAuthService:
             if "client_secret" in error_text.lower():
                 raise AuthError(
                     "Google OAuth client is misconfigured for desktop sign-in. "
-                    "Use a Google Cloud OAuth Client ID of type 'Desktop app' in auth_config.local.json."
+                    "Use a Google Cloud OAuth client of type 'Desktop app' and include its "
+                    "'client_id' and 'client_secret' in auth_config.local.json."
                 ) from exc
             raise AuthError(f"Google sign-in was cancelled or failed to start: {exc}") from exc
 

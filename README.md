@@ -35,15 +35,15 @@ Create a local auth config file:
 copy nova_scout_app\auth\auth_config.example.json nova_scout_app\auth\auth_config.local.json
 ```
 
-Fill in your Firebase app settings plus a Google Desktop OAuth client ID, then start the app:
+Fill in your Firebase app settings plus Google Desktop OAuth credentials, then start the app:
 
 ```bash
 python nova_image_scout.py
 ```
 
-`google_oauth.client_id` must come from a Google Cloud OAuth client of type `Desktop app` (not `Web application`).
+`google_oauth.client_id` and `google_oauth.client_secret` should come from a Google Cloud OAuth client of type `Desktop app` (not `Web application`).
 
-For packaged `.exe` releases, the desktop OAuth client ID is bundled intentionally. Desktop apps are public clients, so the app should rely on PKCE rather than a private embedded secret.
+For packaged `.exe` releases, the desktop OAuth credentials are bundled from the ignored local auth config so the installed app can launch Google sign-in without extra setup.
 
 ## Build Notes
 

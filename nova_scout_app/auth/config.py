@@ -95,6 +95,7 @@ _google_oauth = _local_mapping("google_oauth")
 GOOGLE_OAUTH_CLIENT_CONFIG = {
     "installed": {
         "client_id": _setting(_google_oauth, "client_id", "NOVA_GOOGLE_CLIENT_ID"),
+        "client_secret": _setting(_google_oauth, "client_secret", "NOVA_GOOGLE_CLIENT_SECRET"),
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
